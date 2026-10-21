@@ -1,1 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
 
+    <!-- Pool de conexões com o banco de dados da aplicação SaaS -->
+    <Resource
+        name="jdbc/saasDB"
+        auth="Container"
+        type="javax.sql.DataSource"
+        factory="org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory"
+        driverClassName="com.mysql.cj.jdbc.Driver"
+        url="jdbc:mysql://localhost:3306/saas_db?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC"
+        username="app_user"
+        password="SUBSTITUA_PELA_SENHA_DO_APP_USER"
+        maxTotal="20"
+        maxIdle="10"
+        maxWaitMillis="10000"
+        validationQuery="SELECT 1"
+        testOnBorrow="true" />
+
+</Context>
