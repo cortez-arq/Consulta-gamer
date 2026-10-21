@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
 
-    <!-- Pool de conexões com o banco de dados da aplicação SaaS -->
     <Resource
         name="jdbc/saasDB"
         auth="Container"
