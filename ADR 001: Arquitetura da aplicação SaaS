@@ -1,0 +1,53 @@
+# ADR 001: Arquitetura da aplicação SaaS
+
+- **Status:** Aceita
+- **Data:** 2026-10-21
+
+## Contexto
+
+A aplicação SaaS é desenvolvida em Java e empacotada como um arquivo WAR para implantação no Apache Tomcat. Os dados da aplicação são armazenados em um banco de dados MySQL.
+
+O ambiente de desenvolvimento e implantação utiliza Java 17, Apache Tomcat 9, Maven e MySQL 8.4. A aplicação disponibiliza funcionalidades de consulta e cadastro de clientes.
+
+## Decisão
+
+Adotar a seguinte arquitetura para a versão atual do projeto:
+
+- **Camada web:** Servlet Java para receber requisições HTTP e apresentar os dados de clientes.
+- **Servidor de aplicação:** Apache Tomcat 9 para executar a aplicação web empacotada em WAR.
+- **Persistência:** MySQL, utilizando o banco `saas_db` e a tabela `clientes`.
+- **Acesso a dados:** JDBC para estabelecer a comunicação entre a aplicação Java e o MySQL.
+- **Build e empacotamento:** Maven para compilar o código e gerar o arquivo WAR.
+
+## Justificativa
+
+Essa arquitetura aproveita tecnologias Java consolidadas e permite separar a execução da aplicação web do armazenamento persistente dos dados. O empacotamento WAR simplifica a implantação no Tomcat, enquanto JDBC fornece a integração com o MySQL.
+
+## Consequências
+
+### Positivas
+
+- Implantação centralizada no Apache Tomcat.
+- Persistência dos dados no MySQL.
+- Build reproduzível por meio do Maven.
+- Arquitetura simples para o escopo atual do projeto.
+
+### Limitações e cuidados
+
+- As credenciais do banco não devem ser publicadas no repositório.
+- O acesso JDBC deve tratar erros de conexão e de consulta.
+- Se a aplicação migrar para um `DataSource` JNDI definido no `context.xml`, o código Java deverá ser adaptado para consultar esse recurso.
+- Antes de uso em produção, devem ser avaliados HTTPS, gestão segura de segredos, logs, validação de entradas e políticas de backup.
+
+## Alternativas consideradas
+
+1. **Conexão JDBC direta com `DriverManager`:** abordagem atualmente utilizada pela classe `Conexao.java`; simples para o escopo inicial.
+2. **`DataSource` JNDI configurado no Tomcat:** facilita a gestão do recurso e permite pool de conexões, mas exige configuração do servidor e adaptação do código Java.
+
+A versão atual utiliza `DriverManager`. A configuração JNDI é uma alternativa futura, caso seja implementada no código.
+
+## Referências
+
+- Código-fonte da aplicação (`App.java` e `Conexao.java`).
+- Configuração e documentação do Apache Tomcat.
+- Documentação JDBC do Java.
